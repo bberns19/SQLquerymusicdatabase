@@ -1,0 +1,60 @@
+/*Query 1- Which Countries Bought The Most Rock Music?*/
+SELECT
+  g.name AS GenreType,
+  i.BillingCountry,
+  COUNT(*) AS NumberOfTimes
+FROM Genre g
+JOIN Track t
+  ON g.GenreId = t.GenreId
+JOIN InvoiceLine l
+  ON t.TrackId = l.TrackId
+JOIN Invoice i
+  ON l.InvoiceId = i.InvoiceId
+WHERE g.name = 'Rock'
+GROUP BY 2
+ORDER BY 3 DESC
+LIMIT 10;
+
+
+/*Query 2- Which Genres Did People Spend The Most Money On?*/
+SELECT 
+  SUM(l.UnitPrice*l.quantity), 
+  ROUND(SUM(l.UnitPrice*l.quantity),2) AS TotalSpent, 
+  g.Name AS GenreName
+FROM InvoiceLine l
+JOIN Track t
+  ON l.TrackId=t.TrackId
+JOIN Genre g
+  ON t.GenreId=g.GenreId
+GROUP BY 3
+ORDER BY 1 DESC;
+
+/*Query 3- Artists On Chinook Grouped By Popularity*/
+SELECT
+  a.name,
+  COUNT(l.quantity) AS NumberOfSongsBought,
+  CASE
+    WHEN COUNT(l.quantity) > 30 THEN 'TOP'
+    WHEN COUNT(l.quantity) > 10 THEN 'MIDDLE'
+    ELSE 'LOW'
+  END AS PopularityLevel
+FROM InvoiceLine l
+JOIN track t
+  ON l.TrackId = t.TrackId
+JOIN Album b
+  ON t.AlbumId = b.AlbumId
+JOIN Artist a
+  ON b.ArtistId = a.ArtistID
+GROUP BY 1
+ORDER BY 2 DESC;
+
+/*Query 4-How Long On Average Is Each Track In A Genre?*/
+SELECT AVG(t.milliseconds) AS AverageSongLength, 
+       g.name AS GenreName,
+       AVG(t.milliseconds) / 60000 AS AverageLengthMinutes,
+       ROUND(AVG(t.milliseconds) / 60000,2) AS MinRounded
+FROM track t
+JOIN genre g
+ON t.genreid=g.genreid
+GROUP BY 2
+ORDER BY 1 DESC;

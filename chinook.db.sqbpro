@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\bsb08\Desktop\Data Foundations Udacity\Chinook Database (SQL) Project\chinook.db" foreign_keys="1"/><window><current_tab id="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3627"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="Invoice"/><default_encoding codec=""/><browsetable_info data="AAAACwAAAAoAVAByAGEAYwBrAAAAAAAAAAAAAAAAAAAAAAAAAAAA//////////8AAAAA/////wAAABoAUABsAGEAeQBsAGkAcwB0AFQAcgBhAGMAawAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////AAAAAP////8AAAAQAFAAbABhAHkAbABpAHMAdAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////AAAAAP////8AAAASAE0AZQBkAGkAYQBUAHkAcABlAAAAAAAAAAAAAAABAAAAAQAAAJkAAAAAAAAAAAD//////////wAAAAD/////AAAAFgBJAG4AdgBvAGkAYwBlAEwAaQBuAGUAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAAAABAAAAAAAAAAAA//////////8AAAAA/////wAAAA4ASQBuAHYAbwBpAGMAZQAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////AAAAAP////8AAAAKAEcAZQBuAHIAZQAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAEAAAAAAAAAAAD//////////wAAAAD/////AAAAEABFAG0AcABsAG8AeQBlAGUAAAAAAAAAAAAAAAAAAAAAAAAAAAD//////////wAAAAD/////AAAAEABDAHUAcwB0AG8AbQBlAHIAAAAAAAAAAAAAAAAAAAAAAAAAAAD//////////wAAAAD/////AAAADABBAHIAdABpAHMAdAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////AAAAAP////8AAAAKAEEAbABiAHUAbQAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////AAAAAP////8="/></tab_browse><tab_sql><sql name="SQL 5">SELECT
+  g.name AS GenreType,
+  i.BillingCountry,
+  COUNT(*) AS NumberOfTimes
+FROM Genre g
+JOIN Track t
+  ON g.GenreId = t.GenreId
+JOIN InvoiceLine l
+  ON t.TrackId = l.TrackId
+JOIN Invoice i
+  ON l.InvoiceId = i.InvoiceId
+WHERE g.name = 'Rock'
+GROUP BY 2
+ORDER BY 3 DESC
+LIMIT 10;</sql><sql name="SQL 7">SELECT 
+  SUM(l.UnitPrice*l.quantity), 
+  ROUND(SUM(l.UnitPrice*l.quantity),2) AS TotalSpent, 
+  g.Name AS GenreName
+FROM InvoiceLine l
+JOIN Track t
+  ON l.TrackId=t.TrackId
+JOIN Genre g
+  ON t.GenreId=g.GenreId
+GROUP BY 3
+ORDER BY 1 DESC;</sql><sql name="SQL 8">SELECT
+  a.name,
+  COUNT(l.quantity) AS NumberOfSongsBought,
+  CASE
+    WHEN COUNT(l.quantity) &gt; 30 THEN 'TOP'
+    WHEN COUNT(l.quantity) &gt; 10 THEN 'MIDDLE'
+    ELSE 'LOW'
+  END AS PopularityLevel
+FROM InvoiceLine l
+JOIN track t
+  ON l.TrackId = t.TrackId
+JOIN Album b
+  ON t.AlbumId = b.AlbumId
+JOIN Artist a
+  ON b.ArtistId = a.ArtistID
+GROUP BY 1
+ORDER BY 2 DESC;</sql><sql name="SQL 6">SELECT AVG(t.milliseconds) AS AverageSongLength, 
+       g.name AS GenreName,
+       AVG(t.milliseconds) / 60000 AS AverageLengthMinutes,
+       ROUND(AVG(t.milliseconds) / 60000,2) AS MinRounded
+FROM track t
+JOIN genre g
+ON t.genreid=g.genreid
+GROUP BY 2
+ORDER BY 1 DESC;</sql><current_tab id="0"/></tab_sql></sqlb_project>
